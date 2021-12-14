@@ -38,6 +38,8 @@
   <ItemGroup>
      <Compile Include="Assets/_Scripts/Clients/RequestModule.cs" />
      <Compile Include="Assets/_Scripts/ValueObjects/ReqObject.cs" />
+     <Compile Include="Assets/_Scripts/Utils/PacketManager.cs" />
+     <Compile Include="Assets/_Scripts/Utils/MonoSingleton.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/home/han/Unity/Hub/Editor/2020.3.23f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

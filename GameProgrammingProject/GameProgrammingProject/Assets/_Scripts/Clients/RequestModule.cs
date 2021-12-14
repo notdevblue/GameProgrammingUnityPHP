@@ -5,15 +5,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class RequestModule : MonoBehaviour
+public class RequestModule : MonoSingleton<RequestModule>
 {
     /// <summary>
-    /// Request 전송 시 호출
+    /// Called when request sent.
     /// </summary>
     public event Action OnSendWebRequest;
 
     /// <summary>
-    /// 서버의 Response 도착 시 호출
+    /// Called when response arrived.
     /// </summary>
     public event Action OnWebRequesetArrived;
 
@@ -24,8 +24,18 @@ public class RequestModule : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Sends POST request to server (or website).
+    /// </summary>
+    /// <param name="callback">called when data arrived<br/>NULL when error</param>
+    /// <param name="datas">form datas</param>
+    /// <param name="url">address of server or website</param>
+    public void Request(Action<string> callback = null, ReqObject[] datas = null, string url = "http://172.31.0.224/GameProgramming/Project/Response.php")
+    {
+        StartCoroutine(ReqSend(callback, datas, url));
+    }
 
-    IEnumerator Request(ReqObject[] datas = null, string url = "http://172.31.0.224/GameProgramming/Project/Response.php")
+    private IEnumerator ReqSend(Action<string> callback, ReqObject[] datas, string url)
     {
         // WWWForm 
         WWWForm form = new WWWForm();
@@ -50,12 +60,12 @@ public class RequestModule : MonoBehaviour
         switch(req.result)
         {
             case UnityWebRequest.Result.Success:
-                string res = req.downloadHandler.text;
-                Debug.Log(res);
+                callback?.Invoke(req.downloadHandler.text);
                 break;
 
             default:
-                Debug.LogError(req.error);
+                Debug.LogError($"RequestModule::Request (Coroutine) > {req.result}\r\n{req.error}");
+                callback?.Invoke(null);
                 break;
         }
 
