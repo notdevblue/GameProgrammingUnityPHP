@@ -5,8 +5,14 @@ using UnityEngine;
 
 public class PacketHandler : MonoSingleton<PacketHandler>
 {
-    private Exception _keyNotFoundException = new Exception($"PacketHandler::Handle > key does not exist");
-    private Dictionary<string, Action<(List<string>, List<string>)>> _packetHandlerDictionary = new Dictionary<string, Action<(List<string>, List<string>)>>();
+    private Exception _keyNotFoundException;
+    private Dictionary<string, Action<(List<string>, List<string>)>> _packetHandlerDictionary;
+
+    private void Awake()
+    {
+        _keyNotFoundException = new Exception($"PacketHandler::Handle > key does not exist");
+        _packetHandlerDictionary = new Dictionary<string, Action<(List<string>, List<string>)>>();
+    }
 
     /// <summary>
     /// Handles Packet

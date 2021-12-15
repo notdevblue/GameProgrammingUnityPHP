@@ -13,16 +13,21 @@ public class RequestModule : MonoSingleton<RequestModule>
     public event Action OnSendWebRequest;
 
     /// <summary>
-    /// Called when response arrived.
+    /// Called when response arrived but result is error.
     /// </summary>
-    public event Action OnWebRequesetArrived;
+    public event Action OnWebRequesetFailed;
+
+    /// <summary>
+    /// Called when response arrived and result is success.
+    /// </summary>
+    public event Action<string> OnWebRequestSuccessfullyArrived;
 
     private void Awake()
     {
-        OnSendWebRequest += () => { };
-        OnWebRequesetArrived += () => { };
+        OnSendWebRequest                += ()  => { };
+        OnWebRequesetFailed             += ()  => { };
+        OnWebRequestSuccessfullyArrived += (s) => { };
     }
-
 
     /// <summary>
     /// Sends POST request to server (or website).
@@ -30,7 +35,7 @@ public class RequestModule : MonoSingleton<RequestModule>
     /// <param name="callback">called when data arrived<br/>NULL when error</param>
     /// <param name="datas">form datas</param>
     /// <param name="url">address of server or website</param>
-    public void Request(Action<string> callback = null, ReqObject[] datas = null, string url = "http://172.31.0.224/GameProgramming/Project/Response.php")
+    public void Request(ReqObject[] datas = null, Action<string> callback = null, string url = "http://172.31.0.224/GameProgramming/Project/Response.php")
     {
         StartCoroutine(ReqSend(callback, datas, url));
     }
@@ -55,17 +60,18 @@ public class RequestModule : MonoSingleton<RequestModule>
 
         OnSendWebRequest();
         yield return req.SendWebRequest();
-        OnWebRequesetArrived();
 
         switch(req.result)
         {
             case UnityWebRequest.Result.Success:
                 callback?.Invoke(req.downloadHandler.text);
+                OnWebRequestSuccessfullyArrived(req.downloadHandler.text);
                 break;
 
             default:
                 Debug.LogError($"RequestModule::Request (Coroutine) > {req.result}\r\n{req.error}");
                 callback?.Invoke(null);
+                OnWebRequesetFailed();
                 break;
         }
 

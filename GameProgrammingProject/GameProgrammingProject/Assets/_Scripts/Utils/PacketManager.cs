@@ -11,38 +11,29 @@ public class PacketManager : MonoSingleton<PacketManager>
     /// </summary>
     public event Action<string, (List<string>, List<string>)> OnHandlePacket;
 
-
     #region DEFINE
 
-    const char TYPE = '#';
-    const char MEMBER = '$';
-    const char VALUE = '=';
+    const char TYPE        = '#';
+    const char MEMBER      = '$';
+    const char VALUE       = '=';
     const char ENDOFMEMBER = '&';
-    const char TERMINATOR = ';';
+    const char TERMINATOR  = ';';
 
     #endregion
 
-    Exception _invalidPacketException = new Exception("Packet is invalid");
+    Exception _invalidPacketException;
 
-    private void Start()
+    private void Awake()
     {
-        OnHandlePacket += (a, b) => { };
-        Parse();
+        _invalidPacketException = new Exception("Packet is invalid");
     }
 
-    public void Parse()
-    {
-        RequestModule.Instance.Request((data) => { // TODO : Debug lambda
-            if (data == null) { Debug.LogWarning("PacketManager::Parse() > handled data is null, quitting."); return; }
-            ParsePacket(data);
-        });
-    }
 
     /// <summary>
     /// Parses Packet
     /// </summary>
     /// <param name="data">response</param>
-    private void ParsePacket(string data)
+    public void ParsePacket(string data)
     {
         string[] datas = data.Split(TERMINATOR);
 
@@ -57,8 +48,6 @@ public class PacketManager : MonoSingleton<PacketManager>
                 if (typeEndIdx <= 0) throw _invalidPacketException;
 
                 string type = datas[i].Substring(1, typeEndIdx - 1);
-
-                Debug.Log("type is: " + type);
 
                 #endregion
 

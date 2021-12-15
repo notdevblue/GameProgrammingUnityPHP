@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    static private T _instance = null;
+    static private T _instance;
     static public T Instance
     {
         get
