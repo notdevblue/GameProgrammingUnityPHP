@@ -17,6 +17,7 @@ public class PacketManager : MonoSingleton<PacketManager>
     const char TYPE = '#';
     const char MEMBER = '$';
     const char VALUE = '=';
+    const char ENDOFMEMBER = '&';
     const char TERMINATOR = ';';
 
     #endregion
@@ -43,44 +44,49 @@ public class PacketManager : MonoSingleton<PacketManager>
     /// <param name="data">response</param>
     private void ParsePacket(string data)
     {
-        if (data[0] == TYPE)
+        string[] datas = data.Split(TERMINATOR);
+
+        for (int i = 0; i < datas.Length - 1; ++i)
         {
-            #region TYPE
-
-            int typeEndIdx = data.IndexOf(TYPE, 1);
-
-            if (typeEndIdx <= 0) throw _invalidPacketException;
-
-            string type = data.Substring(1, typeEndIdx - 1);
-
-            Debug.Log("type is: " + type);
-
-            #endregion
-
-            if (data.Length <= typeEndIdx + 1)
+            if (datas[i][0] == TYPE)
             {
-                OnHandlePacket(type, (null, null));
-                return;
-            } // For packet which only contains type.
+                #region TYPE
 
-            #region Member Group
+                int typeEndIdx = datas[i].IndexOf(TYPE, 1);
 
-            if (data[typeEndIdx + 1] != MEMBER) throw _invalidPacketException;
+                if (typeEndIdx <= 0) throw _invalidPacketException;
 
-            int memberStartIdx = typeEndIdx + 1;
-            int memberEndIdx = data.IndexOf(TERMINATOR, memberStartIdx + 1);
+                string type = datas[i].Substring(1, typeEndIdx - 1);
 
-            if (memberEndIdx <= memberStartIdx) throw _invalidPacketException;
+                Debug.Log("type is: " + type);
 
-            string member = data.Substring(memberStartIdx + 1, memberEndIdx - memberStartIdx - 1);
+                #endregion
 
-            #endregion
+                if (datas[i].Length <= typeEndIdx + 1)
+                {
+                    OnHandlePacket(type, (null, null));
+                    return;
+                } // For packet which only contains type.
 
-            OnHandlePacket(type, ParseMember(member));
-        }
-        else
-        {
-            throw _invalidPacketException;
+                #region Member Group
+
+                if (datas[i][typeEndIdx + 1] != MEMBER) throw _invalidPacketException;
+
+                int memberStartIdx = typeEndIdx + 1;
+                int memberEndIdx = datas[i].IndexOf(ENDOFMEMBER, memberStartIdx + 1);
+
+                if (memberEndIdx <= memberStartIdx) throw _invalidPacketException;
+
+                string member = datas[i].Substring(memberStartIdx + 1, memberEndIdx - memberStartIdx - 1);
+
+                #endregion
+
+                OnHandlePacket(type, ParseMember(member));
+            }
+            else
+            {
+                throw _invalidPacketException;
+            }
         }
     }
 
