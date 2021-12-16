@@ -14,8 +14,10 @@ public class SetUserData : MonoBehaviour
 
     private void Start()
     {
-        _selectButton.onClick.AddListener(() => {
+        _selectButton?.onClick.AddListener(() => {
             RequestModule.Instance.Request(new ReqObject[2] { new ReqObject("type", "DATA"), new ReqObject("name", userName) });
+            SelectedUserManager.Instance.Select(userName);
+            UIManager.Instance.OpenSelectPanel();
         });
     }
 
