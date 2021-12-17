@@ -45,4 +45,5 @@ public class PacketHandler : MonoSingleton<PacketHandler>
             _packetHandlerDictionary.Add(type, callback);
         }
     }
+
 }

@@ -12,10 +12,12 @@ public class OnUserMenuButtonPressed : MonoBehaviour
 
         _userMenu.OnArmorButtonPressed += () => {
             RequestModule.Instance.Request(new ReqObject[] { new ReqObject("type", "GETARMOR") });
+            UIManager.Instance.OpenItemDataPanel();
         };
 
         _userMenu.OnWeaponButtonPressed += () => {
             RequestModule.Instance.Request(new ReqObject[] { new ReqObject("type", "GETWEAPON") });
+            UIManager.Instance.OpenItemDataPanel();
         };
 
         _userMenu.OnDataButtonPressed += () => {

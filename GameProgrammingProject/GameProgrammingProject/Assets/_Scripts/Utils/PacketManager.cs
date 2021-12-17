@@ -35,6 +35,8 @@ public class PacketManager : MonoSingleton<PacketManager>
     /// <param name="data">response</param>
     public void ParsePacket(string data)
     {
+        Debug.Log(data);
+
         string[] datas = data.Split(TERMINATOR);
 
         for (int i = 0; i < datas.Length - 1; ++i)

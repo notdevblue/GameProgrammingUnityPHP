@@ -37,21 +37,22 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets/_Scripts/Utils/RequestFullUserData.cs" />
+     <Compile Include="Assets/_Scripts/UIs/PanelManagementObject.cs" />
      <Compile Include="Assets/_Scripts/Handlers/Packet/ErrorHandler.cs" />
+     <Compile Include="Assets/_Scripts/Interfaces/IMenuPanel.cs" />
      <Compile Include="Assets/_Scripts/Clients/RequestModule.cs" />
      <Compile Include="Assets/_Scripts/UIs/SetUserData.cs" />
+     <Compile Include="Assets/_Scripts/Handlers/UIs/OnUserMenuButtonPressed.cs" />
      <Compile Include="Assets/_Scripts/Handlers/Packet/DataHandler.cs" />
      <Compile Include="Assets/_Scripts/Utils/MonoSingleton.cs" />
      <Compile Include="Assets/_Scripts/Utils/PacketHandler.cs" />
+     <Compile Include="Assets/_Scripts/Managers/UIManager.cs" />
      <Compile Include="Assets/_Scripts/Handlers/Packet/OnPacketEvent.cs" />
+     <Compile Include="Assets/_Scripts/Managers/SelectedUserManager.cs" />
      <Compile Include="Assets/_Scripts/Utils/PacketManager.cs" />
      <Compile Include="Assets/_Scripts/ValueObjects/ReqObject.cs" />
      <Compile Include="Assets/_Scripts/UIs/UserMenu.cs" />
-     <Compile Include="Assets/_Scripts/Handlers/UIs/OnUserMenuButtonPressed.cs" />
-     <Compile Include="Assets/_Scripts/Managers/SelectedUserManager.cs" />
-     <Compile Include="Assets/_Scripts/Managers/UIManager.cs" />
-     <Compile Include="Assets/_Scripts/Interfaces/IMenuPanel.cs" />
-     <Compile Include="Assets/_Scripts/UIs/PanelManagementObject.cs" />
+     <Compile Include="Assets/_Scripts/UIs/SetWeaponData.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/home/han/Unity/Hub/Editor/2020.3.23f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
