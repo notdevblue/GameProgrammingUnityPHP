@@ -35,7 +35,7 @@ public class RequestModule : MonoSingleton<RequestModule>
     /// <param name="callback">called when data arrived<br/>NULL when error</param>
     /// <param name="datas">form datas</param>
     /// <param name="url">address of server or website</param>
-    public void Request(ReqObject[] datas = null, Action<string> callback = null, string url = "http://172.31.0.224/GameProgramming/Project/Response.php")
+    public void Request(ReqObject[] datas = null, Action<string> callback = null, string url = "http://127.0.0.1/GameProgramming/Project/Response.php")
     {
         StartCoroutine(ReqSend(callback, datas, url));
     }

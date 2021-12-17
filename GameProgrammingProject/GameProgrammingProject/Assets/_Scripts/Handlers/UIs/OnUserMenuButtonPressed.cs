@@ -21,7 +21,9 @@ public class OnUserMenuButtonPressed : MonoBehaviour
         };
 
         _userMenu.OnDataButtonPressed += () => {
-            RequestModule.Instance.Request(new ReqObject[] { new ReqObject("type", "USERITEM"), new ReqObject("id", SelectedUserManager.Instance._SelectedUserName) });
+            RequestModule.Instance.Request(new ReqObject[] { new ReqObject("type", "USERITEM"), new ReqObject("name", SelectedUserManager.Instance._SelectedUserName) });
+            UIManager.Instance.OpenDataPanel();
+            UIManager.Instance.SetUserHeaderText(SelectedUserManager.Instance._SelectedUserName);
         };
     }
 }

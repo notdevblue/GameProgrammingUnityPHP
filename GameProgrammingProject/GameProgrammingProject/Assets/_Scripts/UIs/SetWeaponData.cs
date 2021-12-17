@@ -15,8 +15,6 @@ public class SetWeaponData : MonoBehaviour
     {
         _selectButton?.onClick.AddListener(() => {
             RequestModule.Instance.Request(new ReqObject[] { new ReqObject("type", "BUY"), new ReqObject("name", SelectedUserManager.Instance._SelectedUserName), new ReqObject("itemId", currentWeapon) });
-            // SelectedUserManager.Instance.Select(currentWeapon);
-            // UIManager.Instance.OpenSelectPanel();
         });
     }
 

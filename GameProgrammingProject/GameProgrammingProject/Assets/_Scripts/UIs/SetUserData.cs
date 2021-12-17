@@ -17,6 +17,7 @@ public class SetUserData : MonoBehaviour
         _selectButton?.onClick.AddListener(() => {
             RequestModule.Instance.Request(new ReqObject[2] { new ReqObject("type", "DATA"), new ReqObject("name", userName) });
             SelectedUserManager.Instance.Select(userName);
+            SelectedUserManager.Instance._SelectedUserGold = userGold;
             UIManager.Instance.OpenSelectPanel();
         });
     }

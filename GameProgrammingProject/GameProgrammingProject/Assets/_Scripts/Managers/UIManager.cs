@@ -1,63 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
     [SerializeField] private GameObject userPanelObject;
     [SerializeField] private GameObject selectPanelObject;
-    [SerializeField] private GameObject dataPanelObject;
     [SerializeField] private GameObject itemDataPanelObject;
+    [SerializeField] private GameObject dataPanelObject;
 
-    private IMenuPanel userPanel;
-    private IMenuPanel selectPanel;
-    private IMenuPanel dataPanel;
-    private IMenuPanel itemDataPanel;
+    [SerializeField] private Text _itemDataText;
+    [SerializeField] private Text _headerUserDataText;
+    [SerializeField] private Button _backButton;
 
-    private Queue<IMenuPanel> _panelQueue;
+    private Stack<GameObject> _panelQueue;
 
 
     private void Start()
     {
-        _panelQueue   = new Queue<IMenuPanel>();
-        userPanel     = userPanelObject.GetComponent<IMenuPanel>();
-        selectPanel   = selectPanelObject.GetComponent<IMenuPanel>();
-        dataPanel     = dataPanelObject.GetComponent<IMenuPanel>();
-        itemDataPanel = itemDataPanelObject.GetComponent<IMenuPanel>();
+        _panelQueue   = new Stack<GameObject>();
 
-        _panelQueue.Enqueue(userPanel);
-        userPanel.Enable();
+        _panelQueue.Push(userPanelObject);
+        userPanelObject.SetActive(true);
+
+        _backButton.onClick.AddListener(() => {
+            Close();
+        });
     }
 
-    public void Open(IMenuPanel panel)
+    public void Open(GameObject panel)
     {
-        _panelQueue.Peek().Disable();
-        _panelQueue.Enqueue(panel);
-        panel.Enable();
+        _panelQueue.Peek().SetActive(false);
+        _panelQueue.Push(panel);
+        panel.SetActive(true);
     }
 
     public void OpenSelectPanel()
     {
-        Open(selectPanel);
+        Open(selectPanelObject);
     }
 
     public void OpenDataPanel()
     {
-        Open(dataPanel);
+        Open(dataPanelObject);
     }
 
     public void OpenItemDataPanel()
     {
-        Open(itemDataPanel);
+        SetItemDataText(SelectedUserManager.Instance._SelectedUserName, SelectedUserManager.Instance._SelectedUserGold);
+        Open(itemDataPanelObject);
     }
 
-    public void Close()
+    public void SetUserHeaderText(string name)
     {
-        if(_panelQueue.Peek() == userPanel) { // 이 이상 닫으면 안됨
-            return;
+        _headerUserDataText.text = $"{name}'s Data";
+    }
+
+    public void SetItemDataText(string name, string gold) 
+    {
+        _itemDataText.text = $"{name} has {gold} gold";
+    }
+
+    public bool Close()
+    {
+        if(_panelQueue.Count <= 1) { // 이 이상 닫으면 안됨
+            return false;
         }
 
-        _panelQueue.Dequeue().Disable();
-        _panelQueue.Peek().Enable();
+        Debug.Log("A");
+
+        _panelQueue.Pop().SetActive(false);
+        _panelQueue.Peek().SetActive(true);
+        return true;
+    }
+
+    public void ReturnToMain()
+    {
+        while(Close());
     }
 }
